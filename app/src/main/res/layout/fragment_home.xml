@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="CONTEXT"
+            type="androidx.lifecycle.LifecycleOwner" />
+
+        <variable
+            name="ViewModel"
+            type="com.order.greenmart.ui.home.HomeViewModel" />
+    </data>
+
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/home_root"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/Basilbackground"
+        tools:context=".ui.home.HomeFragment">
+
+        <com.google.android.material.progressindicator.LinearProgressIndicator
+            android:id="@+id/progress_horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:elevation="20dp"
+            android:indeterminate="true"
+            android:visibility="invisible"
+            app:indeterminateAnimationType="disjoint"
+            app:indicatorColor="@color/BasilOrange500"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerview"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            app:CONTEXT="@{CONTEXT}"
+            app:layoutManager="androidx.recyclerview.widget.GridLayoutManager"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/progress_horizontal"
+            app:productlist="@{ViewModel.productList}"
+            app:spanCount="1" />
+
+
+
+        <com.google.android.material.floatingactionbutton.ExtendedFloatingActionButton
+            android:id="@+id/fab"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="20dp"
+            android:layout_marginBottom="20dp"
+            android:text="0"
+            android:gravity="center"
+            app:behavior_autoHide="true"
+            app:layout_anchor="@id/recyclerview"
+            app:layout_anchorGravity="bottom|end"
+            android:backgroundTint="#DBE5DF"
+            app:icon="@drawable/ic_cart"
+            app:iconTint="@color/basilgreen800"
+            android:textColor="@color/basilgreen800"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+</layout>

@@ -1,0 +1,28 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Theme.GreenMart" parent="Theme.MaterialComponents.DayNight.NoActionBar">
+        <item name="android:fontFamily">@font/visbybold</item>
+
+
+        <item name="strokeColor">@color/basilgreen800</item>
+
+
+        <item name="android:screenOrientation">portrait</item>
+        <item name="colorPrimary">@color/basilgreen800</item>
+        <item name="colorPrimaryVariant">@color/basilgreen500</item>
+        <item name="colorOnPrimary">@color/Basilbackground</item>
+        <!-- Secondary brand color. -->
+        <item name="colorSecondary">@color/BasilOrange500</item>
+        <item name="colorSecondaryVariant">@color/BasilOrange300</item>
+        <item name="colorOnSecondary">@color/Basilbackground</item>
+        <!-- Status bar color. -->
+        <item name="android:statusBarColor">?attr/colorPrimaryVariant</item>
+        <item name="colorOutline">@color/basilgreen800</item>
+
+        <item name="colorOnSurface">@color/basilgreen800</item>
+
+
+
+    </style>
+
+</resources>

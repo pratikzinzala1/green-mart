@@ -1,0 +1,31 @@
+<resources>
+    <string name="app_name">Green Mart</string>
+    <string name="navigation_drawer_open">Open navigation drawer</string>
+    <string name="navigation_drawer_close">Close navigation drawer</string>
+    <string name="nav_header_subtitle">android.studio@android.com</string>
+    <string name="nav_header_desc">Navigation header</string>
+    <string name="action_settings">Settings</string>
+
+    <string name="menu_home">Home</string>
+
+    <string name="greenlogo">Green Mart</string>
+    <string name="newuser">New User \n Register</string>
+
+
+    <dimen name="margintop">10dp</dimen>
+    <dimen name="marginstart">10dp</dimen>
+    <dimen name="marginend">10dp</dimen>
+    <dimen name="marginall">10dp</dimen>
+    <dimen name="margin10dp">10dp</dimen>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="forgot_password">Forgot Password?</string>
+    <string name="new_user_register_now">New User? Register Now</string>
+    <string name="log_in">Log In</string>
+    <string name="enter_password">Enter Password</string>
+    <string name="enter_email">Enter Email</string>
+
+    <string name="roundstring">"%.1f"</string>
+
+
+</resources>

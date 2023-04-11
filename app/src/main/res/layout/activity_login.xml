@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+    </data>
+
+    <LinearLayout
+        android:orientation="vertical"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:background="@color/Basilbackground"
+        tools:context=".ui.home.authentication.LoginActivity">
+
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/logo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/greenfont"
+            android:gravity="center"
+            android:text="@string/greenlogo"
+            android:textColor="@color/basilgreen800"
+            android:textSize="60sp"
+         />
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/inputlayoutemail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/marginall"
+            android:hint="@string/enter_email"
+    >
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/inputemail"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textEmailAddress" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.textfield.TextInputLayout
+            android:id="@+id/inputlayoutpassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/marginall"
+            android:hint="@string/enter_password"
+            app:passwordToggleEnabled="true">
+
+            <com.google.android.material.textfield.TextInputEditText
+                android:id="@+id/inputpassword"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:inputType="textPassword" />
+
+        </com.google.android.material.textfield.TextInputLayout>
+
+        <com.google.android.material.progressindicator.LinearProgressIndicator
+            android:id="@+id/progress_horizontal"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:indeterminate="true"
+            android:visibility="invisible"
+            app:indeterminateAnimationType="disjoint" />
+
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnlogin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/marginall"
+            android:fontFamily="@font/greenfont"
+            android:text="@string/log_in"
+
+            />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/tvNewuser"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="40dp"
+            android:fontFamily="@font/greenfont"
+            android:gravity="center"
+            android:text="@string/new_user_register_now"
+            android:textColor="@color/basilgreen800"
+            android:textSize="20sp"
+            android:textStyle="bold"
+       />
+
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/ForgotPassword"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="30dp"
+            android:gravity="center"
+            android:text="@string/forgot_password"
+            android:textColor="@color/basilgreen800"
+            android:textSize="16sp"
+            android:textStyle="bold"/>
+
+    </LinearLayout>
+</layout>

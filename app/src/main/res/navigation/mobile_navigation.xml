@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/mobile_navigation"
+    app:startDestination="@+id/nav_home">
+
+    <fragment
+        android:id="@+id/nav_home"
+        android:name="com.order.greenmart.ui.home.HomeFragment"
+        android:label="Home"
+        tools:layout="@layout/fragment_home"
+        >
+
+        <action
+            android:id="@+id/action_nav_home_to_detailProductFragment"
+            app:destination="@id/nav_detail" />
+        <action
+            android:id="@+id/action_nav_home_to_nav_cart"
+            app:destination="@id/nav_cart" />
+    </fragment>
+    <fragment
+        android:id="@+id/nav_wishlist"
+        android:name="com.order.greenmart.ui.home.wishlist.WishlistFragment"
+        android:label="Wishlist"
+        tools:layout="@layout/fragment_wishlist" />
+    <fragment
+        android:id="@+id/nav_profile"
+        android:name="com.order.greenmart.ui.home.profile.ProfileFragment"
+        android:label="Profile"
+        tools:layout="@layout/fragment_profile" />
+    <fragment
+        android:id="@+id/nav_cart"
+        android:name="com.order.greenmart.ui.home.cart.cartFragment"
+        android:label="Cart"
+        tools:layout="@layout/fragment_cart" >
+
+        <action
+            android:id="@+id/action_nav_cart_to_nav_home"
+            app:destination="@id/nav_home" />
+    </fragment>
+    <fragment
+        android:id="@+id/nav_orderlist"
+        android:name="com.order.greenmart.ui.home.orderlist.OrderlistFragment"
+        android:label="Orderlist"
+        tools:layout="@layout/fragment_orderlist" />
+    <fragment
+        android:id="@+id/nav_detail"
+        android:name="com.order.greenmart.ui.home.detailproduct.DetailProductFragment"
+        android:label="DetailProductFragment"
+        tools:layout="@layout/fragment_detail_product"
+        >
+        <argument
+            android:name="position"
+            app:argType="integer"
+            android:defaultValue="0" />
+    </fragment>
+
+
+</navigation>

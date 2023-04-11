@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+        <variable
+            name="wishresponse"
+            type="com.order.greenmart.retrofitdatabase.requestResponseDataModel.WishListProductDetail" />
+
+
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        android:orientation="vertical">
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="@dimen/margin10dp"
+            app:cardElevation="5dp"
+            app:cardPreventCornerOverlap="true"
+            app:cardUseCompatPadding="true"
+            app:strokeColor="@color/basilgreen800">
+
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:id="@+id/inside_layout"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/Basilbackground">
+
+
+                <androidx.cardview.widget.CardView
+                    android:id="@+id/inside_card"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="5dp"
+                    android:elevation="0dp"
+                    app:cardCornerRadius="@dimen/margin10dp"
+                    app:layout_constraintBottom_toTopOf="@id/product_description"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <com.google.android.material.imageview.ShapeableImageView
+                        android:id="@+id/product_image"
+                        android:layout_width="150dp"
+                        android:layout_height="150dp"
+                        android:scaleType="centerCrop"
+                        android:src="@drawable/phone"
+                        app:ImageUrl="@{wishresponse.imageUrl}"
+                        app:context="@{context}" />
+                </androidx.cardview.widget.CardView>
+
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:gravity="top"
+                    android:orientation="vertical"
+                    app:layout_constraintBottom_toTopOf="@id/product_description"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toEndOf="@+id/inside_card"
+                    app:layout_constraintTop_toTopOf="@id/inside_card">
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="end"
+                        android:orientation="horizontal">
+
+                        <androidx.appcompat.widget.AppCompatImageView
+                            android:id="@+id/remove_from_wishlist"
+                            android:layout_width="25dp"
+                            android:layout_height="30dp"
+                            android:layout_marginEnd="@dimen/margin10dp"
+                            android:padding="5dp"
+                            android:src="@drawable/ic_cross" />
+                    </LinearLayout>
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/product_name"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:maxLines="2"
+                        android:padding="4dp"
+                        android:text="@{wishresponse.title}"
+                        android:textColor="@color/basilgreen800"
+                        android:textSize="20dp"
+                        tools:text="Pixel 7 Pro" />
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/product_price"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:maxLines="1"
+                        android:padding="4dp"
+                        android:text="@{'$' + wishresponse.price}"
+                        android:textColor="@color/basilgreen500"
+                        tools:text="400" />
+
+                </LinearLayout>
+
+                <com.google.android.material.textview.MaterialTextView
+                    android:id="@+id/product_description"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/margin10dp"
+                    android:maxLines="2"
+                    android:padding="4dp"
+                    android:text="@{wishresponse.description}"
+                    android:textColor="@color/basilgreen800"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent" />
+
+
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+
+        </com.google.android.material.card.MaterialCardView>
+
+    </LinearLayout>
+</layout>

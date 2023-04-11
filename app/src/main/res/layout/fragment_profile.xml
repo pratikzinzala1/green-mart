@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+    </data>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical"
+        android:gravity="center"
+        tools:context=".ui.home.profile.ProfileFragment">
+
+        <ImageView
+            android:tint="@color/basilgreen800"
+            android:src="@drawable/japan_symbol"
+            android:layout_width="match_parent"
+            android:layout_height="150dp"
+            tools:ignore="UseAppTint" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/profilename"
+            android:gravity="center"
+            android:text="Pratik Zinzala"
+            android:textSize="50sp"
+            android:textColor="@color/basilgreen800"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/profileEmail"
+            android:gravity="center"
+            android:textSize="15sp"
+            android:text="pratikzinzala@gmail.com"
+            android:textColor="@color/basilgreen500"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <com.google.android.material.textview.MaterialTextView
+            android:id="@+id/profilephone"
+            android:gravity="center"
+            android:textSize="25dp"
+            android:text="Phone:1234567890"
+            android:textColor="@color/basilgreen100"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btnChangepassword"
+            android:text="Change Password"
+            android:layout_margin="@dimen/margin10dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"/>
+
+
+    </LinearLayout>
+</layout>
