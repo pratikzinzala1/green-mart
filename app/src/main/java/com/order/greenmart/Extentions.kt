@@ -62,12 +62,10 @@ fun RemoveFromCart(cartItemRequest: CartItemRequest): LiveData<Boolean> {
 
 fun AddToWishList(addToCartRequest: AddToCartRequest): LiveData<String> {
     val addToCartRequest = addToCartRequest
-    val jwtToken: String =
-        GreenMartApplication.sharedPreferences!!.getString("JWTTOKEN", null).toString()
+    val jwtToken: String = GreenMartApplication.sharedPreferences!!.getString("JWTTOKEN", null).toString()
 
 
     val requestCall = GreenMartApi.retrofitService.AddToWishList(addToCartRequest, jwtToken)
-
 
     val _wishitemid = MutableLiveData<String>()
     val wishitemid: LiveData<String> = _wishitemid
@@ -79,21 +77,17 @@ fun AddToWishList(addToCartRequest: AddToCartRequest): LiveData<String> {
         ) {
 
             if (response.code() == 200) {
-
                 _wishitemid.value = response.body()!!.data._id
-                println("ItemAdded")
-                Log.d("ADDED", "ItemAdded")
+                println("ItemAdded to WishList")
             } else {
                 println("NOT ADDED")
                 println(response.code())
-                Log.d("ADDED", "NOT ADDED")
             }
 
         }
 
         override fun onFailure(call: Call<AddToWatchListResponse>, t: Throwable) {
             println("Wrong")
-            Log.d("ADDED", "Wrong")
         }
 
     })
@@ -124,12 +118,10 @@ fun RemoveFromWishList(wishListRemoveRequest: WishListRemoveRequest):LiveData<Bo
             if (response.code() == 200) {
 
                 _oncomplete.value = true
-                println("Item Removed")
-                Log.d("ADDED", "Removed")
+                println("Item Removed from WishList")
             } else {
                 println("NOT Removed")
                 println(response.code())
-                Log.d("ADDED", "NOT Removed")
             }
         }
 

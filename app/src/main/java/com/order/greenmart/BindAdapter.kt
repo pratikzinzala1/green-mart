@@ -82,7 +82,6 @@ fun bindProductList(
 
     productlist.observe(CONTEXT, Observer {
         adapter.submitList(it)
-        Log.d("DATA", "Binding List : " + it.toString())
     })
 
 
@@ -98,7 +97,6 @@ fun bindOrderList(
 
     productlist.observe(CONTEXT, Observer {
         adapter.submitList(it)
-        Log.d("DATA", "Binding List : " + it.toString())
     })
 
 

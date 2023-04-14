@@ -11,7 +11,7 @@
 
         <variable
             name="ViewModel"
-            type="com.order.greenmart.ui.home.cart.CartViewModel" />
+            type="com.order.greenmart.ui.home.HomeViewModel" />
 
     </data>
 
@@ -19,6 +19,7 @@
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:background="@color/Basilbackground"
         tools:context=".ui.home.cart.cartFragment">
 
 

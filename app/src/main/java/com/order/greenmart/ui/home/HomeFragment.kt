@@ -1,7 +1,5 @@
 package com.order.greenmart.ui.home
 
-import android.graphics.Color
-import android.os.Build
 import android.os.Bundle
 import android.view.*
 import android.widget.EditText
@@ -13,6 +11,9 @@ import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleOwner
 import androidx.navigation.fragment.findNavController
+import com.google.firebase.analytics.FirebaseAnalytics
+import com.google.firebase.analytics.ktx.analytics
+import com.google.firebase.ktx.Firebase
 import com.order.greenmart.MainActivity
 import com.order.greenmart.R
 import com.order.greenmart.adapter.ProductAdapter
@@ -27,6 +28,7 @@ class HomeFragment : Fragment() {
 
     private var viewlifecycleOwner: LifecycleOwner? = null
 
+    private lateinit var analytics: FirebaseAnalytics
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -35,7 +37,7 @@ class HomeFragment : Fragment() {
     ): View {
 
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
-
+        viewModel.reFreshProductData()
         return binding.root
 
     }
@@ -43,6 +45,8 @@ class HomeFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        analytics = Firebase.analytics
 
 
 
@@ -53,7 +57,7 @@ class HomeFragment : Fragment() {
         binding.recyclerview.adapter =
             ProductAdapter(requireContext(), viewLifecycleOwner, viewModel)
 
-        viewModel.reFreshProductData()
+
         var searchView: SearchView? = null
 
         activity?.addMenuProvider(object : MenuProvider {
@@ -67,7 +71,8 @@ class HomeFragment : Fragment() {
                 searchView!!.setMaxWidth(Integer.MAX_VALUE);
 
 
-                val searchEditText = searchView!!.findViewById(androidx.appcompat.R.id.search_src_text) as EditText
+                val searchEditText =
+                    searchView!!.findViewById(androidx.appcompat.R.id.search_src_text) as EditText
                 searchEditText.setTextColor(requireActivity().getColor(R.color.Basilbackground))
                 searchEditText.setHintTextColor(requireActivity().getColor(R.color.Basilbackground))
 
@@ -79,9 +84,8 @@ class HomeFragment : Fragment() {
                     }
 
 
-
-
                     override fun onQueryTextChange(newText: String?): Boolean {
+                        throw RuntimeException("Test Crash")
 
                         return true
                     }
@@ -185,14 +189,18 @@ class HomeFragment : Fragment() {
 
     }
 
+
     override fun onResume() {
         super.onResume()
         viewModel.privateReFreshProductData()
+        viewModel.apiCallCount = 0
     }
 
 
     override fun onDestroyView() {
         super.onDestroyView()
+
+        println("ON Destroy Called")
         _binding = null
     }
 }

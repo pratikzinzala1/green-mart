@@ -25,7 +25,7 @@
     <string name="enter_password">Enter Password</string>
     <string name="enter_email">Enter Email</string>
 
-    <string name="roundstring">"%.1f"</string>
+    <string name="roundstring">"%.2f"</string>
 
 
 </resources>

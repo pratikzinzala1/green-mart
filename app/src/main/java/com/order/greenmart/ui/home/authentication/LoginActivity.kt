@@ -90,7 +90,6 @@ class LoginActivity : AppCompatActivity() {
                         putExtra("UID", response.body()!!.data!!._id)
                         putExtra("SENDYOUEMAIL", response.body()!!.msg)
                         putExtra("FORGOTPASSWORD", true)
-                        putExtra("JWTTOKEN", response.body()!!.data!!.jwtToken)
                     }
                     startActivity(i)
                     finish()

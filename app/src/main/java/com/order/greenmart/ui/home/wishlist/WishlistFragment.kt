@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.*
 import androidx.core.view.MenuProvider
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.Observer
@@ -11,6 +12,7 @@ import com.order.greenmart.MainActivity
 import com.order.greenmart.R
 import com.order.greenmart.adapter.WishListAdapter
 import com.order.greenmart.databinding.FragmentWishlistBinding
+import com.order.greenmart.ui.home.HomeViewModel
 
 
 class WishlistFragment : Fragment() {
@@ -19,7 +21,7 @@ class WishlistFragment : Fragment() {
     private var _binding:FragmentWishlistBinding? = null
     private val binding get() = _binding
 
-    private val viewModel: WishListViewModel by viewModels()
+    private val viewModel: HomeViewModel by activityViewModels()
 
 
     override fun onCreateView(
@@ -90,6 +92,7 @@ class WishlistFragment : Fragment() {
 
     override fun onDestroy() {
         super.onDestroy()
+        println("Wishlist Destroyed")
         _binding = null
     }
 

@@ -29,56 +29,70 @@ data class ProductDetails(
     var watchListItemId: String?
 ) {
 
+    fun addTocart(
+        life: LifecycleOwner,
+        view: TextView,
+        context: Context,
+        viewModel: HomeViewModel
+    ) {
 
-    var isInWatchList: Boolean? = false
-    var isInCartList: Boolean? = false
 
-    fun addTocart(life:LifecycleOwner,view:TextView,context: Context,viewModel: HomeViewModel){
-
+        println(viewModel.apiCallCount)
         if (cartItemId != null) {
+            view.isEnabled = false
+            viewModel.apiCallCount++
+            val obj = CartItemRequest(cartItemId!!)
+            val live = RemoveFromCart(obj)
 
-            if (isInCartList!! == false){
-                isInCartList = true
-                val obj = CartItemRequest(cartItemId!!)
-                val live = RemoveFromCart(obj)
+            view.text = "Wait...."
 
-                live.observe(life, Observer {
-
-                    viewModel.decreaseTotal()
+            live.observe(life, Observer {
+                viewModel.apiCallCount--
+                view.isEnabled = true
+                viewModel.decreaseTotal()
+                if (viewModel.apiCallCount == 0) {
+                    view.text = "Add To Cart"
                     viewModel.privateReFreshProductData()
-                    isInCartList = false
+                }
 
-                })
+            })
 
-                cartItemId = null
-                quantity = null
-                view.text = "Add To Cart"
-
-                view.setTextColor(context.getColor(R.color.basilgreen800))
-                view.background = context.resources.getDrawable(R.drawable.leftroundborder,context.theme)
-                // view.setImageResource(R.drawable.ic_cart_border)
-            }
+            cartItemId = null
+            quantity = null
 
 
-        } else if (isInCartList!! == false) {
+            view.setTextColor(context.getColor(R.color.basilgreen800))
+            view.background =
+                context.resources.getDrawable(R.drawable.leftroundborder, context.theme)
 
-            isInCartList = true
+
+        } else if (view.isEnabled == true) {
+
+            view.isEnabled = false
+            viewModel.apiCallCount++
             val obj = AddToCartRequest(_id)
             val live = AddToCart(obj)
-            live.observe(life, Observer {
+            view.text = "Wait...."
 
-                isInCartList = false
+            live.observe(life, Observer {
+                view.isEnabled = true
+                viewModel.apiCallCount--
                 viewModel.increaseTotal()
                 cartItemId = it.productDetails._id
                 quantity = it.quantity
-                viewModel.privateReFreshProductData()
+                view.text = "Remove From Cart"
+
+                if (viewModel.apiCallCount == 0) {
+                    viewModel.privateReFreshProductData()
+
+                }
             })
             cartItemId = "0"
             quantity = 0
-            view.text = "Remove From Cart"
 
             view.setTextColor(context.getColor(R.color.white))
-            view.background = context.resources.getDrawable(R.drawable.leftroundfilled,context.theme)
+            view.background =
+                context.resources.getDrawable(R.drawable.leftroundfilled, context.theme)
 
 
         }
@@ -86,47 +100,62 @@ data class ProductDetails(
     }
 
 
-    fun addToWishList(life:LifecycleOwner,view:TextView,context: Context){
+    fun addToWishList(life: LifecycleOwner, view: TextView, context: Context,viewModel: HomeViewModel) {
         if (watchListItemId != null) {
-            if (isInWatchList!! == false){
-                isInWatchList = true
-                println("RemoveFromWishList called")
-                val obj = WishListRemoveRequest(watchListItemId!!)
-                val live = RemoveFromWishList(obj)
-                live.observe(life, Observer {
-                    //privateReFreshProductData()
-                    isInWatchList = false
-                })
-                watchListItemId = null
-                view.text = "Add To Wishlist"
+            view.isEnabled = false
+            viewModel.apiCallCount++
 
-                // view.setImageResource(R.drawable.svg_heart_outline)
-                view.setTextColor(context.getColor(R.color.basilgreen800))
-                view.background = context.resources.getDrawable(R.drawable.rightroundborder,context.theme)
-            }
-
-        } else if (isInWatchList!! == false) {
-            isInWatchList = true
-            val obj = AddToCartRequest(_id)
-            val live = AddToWishList(obj)
+            val obj = WishListRemoveRequest(watchListItemId!!)
+            val live = RemoveFromWishList(obj)
+            view.text = "Wait...."
 
             live.observe(life, Observer {
-                println(it)
+                //privateReFreshProductData()
+                view.isEnabled = true
+                viewModel.apiCallCount--
+                view.text = "Add To Wishlist"
+
+                if (viewModel.apiCallCount == 0) {
+                    viewModel.privateReFreshProductData()
+                }
+            })
+            watchListItemId = null
+
+            // view.setImageResource(R.drawable.svg_heart_outline)
+            view.setTextColor(context.getColor(R.color.basilgreen800))
+            view.background =
+                context.resources.getDrawable(R.drawable.rightroundborder, context.theme)
+
+
+        } else if (view.isEnabled == true) {
+            viewModel.apiCallCount++
+            view.isEnabled = false
+            val obj = AddToCartRequest(_id)
+            val live = AddToWishList(obj)
+            view.text = "Wait...."
+
+            live.observe(life, Observer {
                 watchListItemId = it
-                isInWatchList = false
+                view.isEnabled = true
+                view.text = "Remove From Wishlist"
 
-
-                //viewModel.privateReFreshProductData()
+                viewModel.apiCallCount--
+                if (viewModel.apiCallCount == 0) {
+                    viewModel.privateReFreshProductData()
+                }
 
             })
-            view.text = "Remove From Wishlist"
             watchListItemId = "0"
 
             view.setTextColor(context.getColor(R.color.white))
-            view.background = context.resources.getDrawable(R.drawable.rightroundfilled,context.theme)
-           // view.setImageResource(R.drawable.ic_like_filled)
+            view.background =
+                context.resources.getDrawable(R.drawable.rightroundfilled, context.theme)
+            // view.setImageResource(R.drawable.ic_like_filled)
 
         }
     }
+
+
+
 
 }

@@ -24,6 +24,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
+
         android:orientation="vertical">
 
         <androidx.cardview.widget.CardView
@@ -32,12 +33,14 @@
             android:layout_margin="@dimen/margin10dp"
             app:cardCornerRadius="20dp"
             app:cardElevation="5dp"
+            android:background="@color/white"
             android:foreground="@drawable/cardborder"
             app:cardPreventCornerOverlap="true"
             app:strokeColor="@color/basilgreen800">
 
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:id="@+id/inside_layout"
+                android:background="@color/white"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
@@ -49,6 +52,7 @@
                     android:src="@drawable/phone"
                     app:ImageUrl="@{productresponse.imageUrl}"
                     app:context="@{context}"
+                    android:scaleType="fitCenter"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent" />
 

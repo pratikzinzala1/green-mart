@@ -9,16 +9,13 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.Observer
 import com.order.greenmart.R
 import com.order.greenmart.adapter.OrderListAdapter
-import com.order.greenmart.adapter.WishListAdapter
 import com.order.greenmart.databinding.FragmentOrderlistBinding
-import com.order.greenmart.ui.home.wishlist.WishListViewModel
 
 
 class OrderlistFragment : Fragment() {
 
 
-
-    private var _binding:FragmentOrderlistBinding? = null
+    private var _binding: FragmentOrderlistBinding? = null
     private val binding get() = _binding
 
     private val viewModel: OrderlistViewModel by viewModels()
@@ -28,7 +25,7 @@ class OrderlistFragment : Fragment() {
     ): View? {
 
 
-        _binding = FragmentOrderlistBinding.inflate(inflater,container,false)
+        _binding = FragmentOrderlistBinding.inflate(inflater, container, false)
 
         return _binding!!.root
     }
@@ -46,15 +43,15 @@ class OrderlistFragment : Fragment() {
 
         viewModel.progressnotifier.observe(viewLifecycleOwner, Observer {
             binding!!.tvcart.text = ""
-            when(it){
-                1->{
+            when (it) {
+                1 -> {
                     binding!!.progressHorizontal.visibility = View.VISIBLE
                 }
-                2->{
+                2 -> {
                     binding!!.progressHorizontal.visibility = View.GONE
                     binding!!.tvcart.text = "Your WishList Is \n Empty!"
                 }
-                3->{
+                3 -> {
                     binding!!.progressHorizontal.visibility = View.GONE
                 }
             }
@@ -83,7 +80,6 @@ class OrderlistFragment : Fragment() {
 
 
     }
-
 
 
 }

@@ -60,6 +60,7 @@
                     android:layout_width="0dp"
                     android:layout_height="0dp"
                     android:gravity="top"
+                    android:layout_margin="@dimen/margin10dp"
                     android:orientation="vertical"
                     app:layout_constraintBottom_toTopOf="@id/product_description"
                     app:layout_constraintEnd_toEndOf="parent"

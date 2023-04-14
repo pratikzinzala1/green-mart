@@ -42,9 +42,9 @@ class DetailProductFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val position = requireArguments().getInt("position")
-
-        val product = viewModel.getsingleitem(position)
+//        val position = requireArguments().getInt("position")
+//
+        val product = viewModel.getsingleitem(0)
 
         binding.productDetail = product
 
@@ -64,47 +64,40 @@ class DetailProductFragment : Fragment() {
 
             if (isChecked) {
                 if (checkedId == R.id.add_to_cart) {
+
+                    binding.togglegrp1.isEnabled = false
                     if (product.cartItemId == null) {
                         val obj = AddToCartRequest(product._id)
-                        AddToCart(obj)
-                        binding.addToCart.text = "Go to Cart"
+                        val live = AddToCart(obj)
 
+
+                        binding.addToCart.text = "Adding To Cart......"
+                        live.observe(viewLifecycleOwner) {
+
+                            if (it.cartId != null) {
+                                binding.togglegrp1.isEnabled = true
+                                binding.addToCart.text = "Go to Cart"
+
+                            }
+
+                        }
                     }
                 }
 
 
             } else {
                 if (checkedId == R.id.add_to_cart) {
-//
-
+                    findNavController().popBackStack()
                     findNavController().navigate(R.id.nav_cart)
 
                 }
-
-//                if (checkedId == R.id.add_to_cart) {
-//
-//                    if (product.quantity!!>0){
-//                        binding.togglegrp1.check(R.id.add_to_cart)
-//
-//                        val obj = CartItemRequest(product.cartItemId!!)
-//                        val live = RemoveFromCart(obj)
-//
-//                        live.observe(this){
-//                            product.cartItemId = null
-//                            product.quantity = 0
-//                        }
-//
-//                        binding.addToCart.text = "Add To Cart"
-//
-//                    }
-//
-//
-//                }
-
             }
-
-
         }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        println("Detail Destroyed")
     }
 
 

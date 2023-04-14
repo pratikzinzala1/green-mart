@@ -1,18 +1,10 @@
 package com.order.greenmart.retrofitdatabase.requestResponseDataModel
 
-import android.widget.Button
-import android.widget.ImageView
 import android.widget.TextView
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModel
 import com.order.greenmart.RemoveFromCart
-import com.order.greenmart.RemoveFromWishList
 import com.order.greenmart.adapter.CartAdapter
-import com.order.greenmart.adapter.WishListAdapter
 import com.order.greenmart.retrofitdatabase.requestmodel.CartItemRequest
-import com.order.greenmart.retrofitdatabase.requestmodel.WishListRemoveRequest
-import com.order.greenmart.ui.home.cart.CartViewModel
+import com.order.greenmart.ui.home.HomeViewModel
 
 data class CartDetail(
     var _id: String?,
@@ -23,61 +15,50 @@ data class CartDetail(
     val userId: String
 ) {
 
-    fun increaseItem(
-        life: LifecycleOwner,
-        viewModel: CartViewModel,
-        productItemCount: TextView,
-        totalperitem: TextView
-    ) {
 
+    fun increaseItem(
+        viewModel: HomeViewModel, productItemCount: TextView, totalperitem: TextView
+    ) {
         quantity++
         productItemCount.text = quantity.toString()
         itemTotal = productDetails.price.toDouble().times(quantity)
-        totalperitem.text = "$" + itemTotal.toString()
+        totalperitem.text = "$" + String.format("%.2f", itemTotal!!.toDouble())
         viewModel.updateCartTotal(productDetails.price.toDouble())
-
         val obj = CartItemRequest(_id!!)
-        viewModel.increaseCartItem(obj, quantity)
-
-
+        viewModel.increaseCartItem(obj)
     }
+
     fun decreaseItem(
-        life: LifecycleOwner,
-        viewModel: CartViewModel,
-        productItemCount: TextView,
-        totalperitem: TextView
+        viewModel: HomeViewModel, productItemCount: TextView, totalperitem: TextView
     ) {
 
-        if (quantity>0){
+        if (quantity > 0) {
             quantity--
             productItemCount.text = quantity.toString()
             itemTotal = productDetails.price.toDouble().times(quantity)
-            totalperitem.text = "$" + itemTotal.toString()
-            viewModel.updateCartTotal(productDetails.price.toDouble())
-
+            totalperitem.text = "$" + String.format("%.2f", itemTotal!!.toDouble())
+            viewModel.updateCartTotaldecrease(productDetails.price.toDouble())
             val obj = CartItemRequest(_id!!)
-            viewModel.decreaseCartItem(obj, quantity)
+            viewModel.decreaseCartItem(obj)
 
         }
 
     }
 
     fun removeFromCart(
-
+        viewModel: HomeViewModel,
         adapter: CartAdapter,
         position: Int,
 
-    ) {
-
+        ) {
+        viewModel.updateCartTotaldecrease(itemTotal!!)
         val obj = CartItemRequest(_id!!)
         removeItem(position, adapter)
         RemoveFromCart(obj)
-
     }
 
     fun removeItem(position: Int, adapter: CartAdapter) {
         val currentList = adapter.currentList.toMutableList()
-
         try {
             currentList.removeAt(position)
             println("This is  = " + currentList.size)

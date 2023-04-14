@@ -10,11 +10,11 @@ import androidx.recyclerview.widget.RecyclerView
 
 import com.order.greenmart.databinding.ItemCartBinding
 import com.order.greenmart.retrofitdatabase.requestResponseDataModel.CartDetail
+import com.order.greenmart.ui.home.HomeViewModel
 
-import com.order.greenmart.ui.home.cart.CartViewModel
 
 
-class CartAdapter(val viewLifecycleOwner: LifecycleOwner, val viewModel: CartViewModel) :
+class CartAdapter(val viewLifecycleOwner: LifecycleOwner, val viewModel: HomeViewModel) :
     ListAdapter<CartDetail, CartAdapter.ItemViewholder>(DiffCallback2()) {
 
 
@@ -25,14 +25,17 @@ class CartAdapter(val viewLifecycleOwner: LifecycleOwner, val viewModel: CartVie
         fun bind(item: CartDetail) {
             binding.cartProductDetail = item
 
+
+            binding.totalperitem.text = "$" + String.format("%.2f", item.itemTotal!!.toDouble())
+
             binding.itemIncrease.setOnClickListener {
 
-                item.increaseItem(viewLifecycleOwner,viewModel,binding.productItemCount,binding.totalperitem)
+                item.increaseItem(viewModel,binding.productItemCount,binding.totalperitem)
 
             }
             binding.itemDecrease.setOnClickListener {
 
-                item.decreaseItem(viewLifecycleOwner,viewModel,binding.productItemCount,binding.totalperitem)
+                item.decreaseItem(viewModel,binding.productItemCount,binding.totalperitem)
 
             }
 
@@ -40,8 +43,7 @@ class CartAdapter(val viewLifecycleOwner: LifecycleOwner, val viewModel: CartVie
 
             binding.addToCart.setOnClickListener {
 
-                item.removeFromCart(this@CartAdapter,adapterPosition)
-
+                item.removeFromCart(viewModel,this@CartAdapter,adapterPosition)
 
             }
 

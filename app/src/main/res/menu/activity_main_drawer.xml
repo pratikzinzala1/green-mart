@@ -5,7 +5,6 @@
 
     <group android:checkableBehavior="single">
         <item android:title="Profile"
-            android:iconTint="@color/basilgreen800"
             android:icon="@drawable/japan_symbol"
             android:id="@+id/nav_profile"/>
         <item
