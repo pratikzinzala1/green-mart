@@ -1,16 +1,16 @@
 package com.order.greenmart.ui.home.cart
 
+import android.Manifest
 import android.animation.Animator
 import android.annotation.SuppressLint
-import android.app.Activity
 import android.app.NotificationChannel
 import android.app.NotificationManager
-import android.app.PendingIntent
 import android.content.Context
-import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Build
 import android.os.Bundle
 import android.view.*
+import androidx.core.app.ActivityCompat
 import androidx.core.app.NotificationCompat
 import androidx.core.app.NotificationManagerCompat
 import androidx.core.view.MenuProvider
@@ -18,10 +18,11 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.Observer
+import androidx.navigation.NavDeepLinkBuilder
+import com.order.greenmart.GreenMartApplication
 import com.order.greenmart.MainActivity
 import com.order.greenmart.R
 import com.order.greenmart.adapter.CartAdapter
-import com.order.greenmart.checkForInternet
 import com.order.greenmart.databinding.FragmentCartBinding
 import com.order.greenmart.ui.home.HomeViewModel
 
@@ -53,55 +54,44 @@ class cartFragment : Fragment() {
         binding!!.context = viewLifecycleOwner
         binding!!.recyclerview.adapter = CartAdapter(viewLifecycleOwner, viewModel)
 
-        showNotification()
 
         var total: String = "0.0"
         binding!!.lottieanimation.setAnimation("orderconfirmed.json")
 
         binding!!.btnplaceorder.setOnClickListener {
 
-            if (checkForInternet(requireContext())) {
 
-                if (total.toDouble() > 0.0) {
+            if (total.toDouble() > 0.0) {
 
-                    val live = viewModel.placeOrder(total)
+                val live = viewModel.placeOrder(total)
 
-                    live.observe(viewLifecycleOwner) {
-                        if (it) {
+                live.observe(viewLifecycleOwner) {
+                    if (it) {
 
+                        showNotification()
 
+                        binding!!.lottieanimation.visibility = View.VISIBLE
+                        binding!!.lottieanimation.playAnimation()
+                        binding!!.lottieanimation.addAnimatorListener(object :
+                            Animator.AnimatorListener {
+                            override fun onAnimationStart(p0: Animator) {
+                            }
 
+                            override fun onAnimationEnd(p0: Animator) {
+                                binding!!.lottieanimation.visibility = View.GONE
+                            }
 
+                            override fun onAnimationCancel(p0: Animator) {
+                            }
 
-                            binding!!.lottieanimation.visibility = View.VISIBLE
-                            binding!!.lottieanimation.playAnimation()
-                            binding!!.lottieanimation.addAnimatorListener(object :
-                                Animator.AnimatorListener {
-                                override fun onAnimationStart(p0: Animator) {
-                                }
+                            override fun onAnimationRepeat(p0: Animator) {
+                            }
 
-                                override fun onAnimationEnd(p0: Animator) {
-                                    binding!!.lottieanimation.visibility = View.GONE
-                                }
-
-                                override fun onAnimationCancel(p0: Animator) {
-                                }
-
-                                override fun onAnimationRepeat(p0: Animator) {
-                                }
-
-                            })
-                        }
-
+                        })
                     }
-                }else{
-                    (activity as MainActivity).showSnackBar("Add Product First")
 
                 }
 
-
-            } else {
-                (activity as MainActivity).showSnackBar("No Internet")
             }
 
         }
@@ -132,48 +122,48 @@ class cartFragment : Fragment() {
 
         })
 
-        activity?.addMenuProvider(object : MenuProvider {
-            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
-                menuInflater.inflate(R.menu.main, menu)
-            }
-
-            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
-                return when (menuItem.itemId) {
-                    R.id.action_refersh -> {
-                        viewModel.reFreshCart()
-                        true
-                    }
-
-                    else -> false
-                }
-            }
-        }, viewLifecycleOwner, Lifecycle.State.RESUMED)
-
 
     }
 
-    @SuppressLint("MissingPermission")
-    private fun showNotification(){
-        createNotificationChannel()
-        val notificationIntent = Intent(requireActivity(),MainActivity::class.java)
-        notificationIntent.putExtra("CARTLAUNCH",true)
 
-        val pendingIntent = PendingIntent.getActivity(
-            requireContext(),
-            0, notificationIntent, PendingIntent.FLAG_IMMUTABLE
-        )
+    private fun showNotification() {
 
-        val builder = NotificationCompat.Builder(requireActivity(), CHANNEL_ID)
-            .setSmallIcon(R.drawable.japan_symbol)
-            .setContentTitle("Your order has been placed")
-            .setContentText("Order complete! Thank you so much for choosing us! Here are the details...")
-            .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-            .setContentIntent(pendingIntent)
+        if (GreenMartApplication.sharedPreferences!!.getBoolean("CHECKED",false)){
+            createNotificationChannel()
 
-        with(NotificationManagerCompat.from(requireContext())) {
-            // notificationId is a unique int for each notification that you must define
-            notify(1, builder.build())
+
+            val pendingIntent = NavDeepLinkBuilder(requireActivity().applicationContext)
+                .setComponentName(MainActivity::class.java)
+                .setGraph(R.navigation.mobile_navigation)
+                .setDestination(R.id.nav_orderlist)
+                .createPendingIntent()
+
+
+            val builder = NotificationCompat.Builder(requireActivity().applicationContext, CHANNEL_ID)
+                .setSmallIcon(R.drawable.japan_symbol)
+                .setContentTitle("Your order has been placed")
+                .setContentText("Order complete! Thank you so much for choosing us! Here are the details...")
+                .setPriority(NotificationCompat.PRIORITY_HIGH)
+                .setContentIntent(pendingIntent)
+
+            with(NotificationManagerCompat.from(requireActivity().applicationContext)) {
+                if (ActivityCompat.checkSelfPermission(
+                        requireContext(),
+                        Manifest.permission.POST_NOTIFICATIONS
+                    ) != PackageManager.PERMISSION_GRANTED
+                ) {
+
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+                        ActivityCompat.requestPermissions(requireActivity(), arrayOf( Manifest.permission.POST_NOTIFICATIONS), 123 )
+                    }
+
+                    return
+                }
+                notify(1, builder.build())
+            }
+
         }
+
     }
 
 
@@ -183,7 +173,7 @@ class cartFragment : Fragment() {
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             val name = getString(R.string.app_name)
             val descriptionText = getString(R.string.app_name)
-            val importance = NotificationManager.IMPORTANCE_DEFAULT
+            val importance = NotificationManager.IMPORTANCE_HIGH
             val channel = NotificationChannel(CHANNEL_ID, name, importance)
             channel.description = descriptionText
             // Register the channel with the system
@@ -199,6 +189,14 @@ class cartFragment : Fragment() {
         viewModel.reFreshCart()
 
     }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
+        viewModel.finishProgress()
+    }
+
+
 
 
 }

@@ -94,7 +94,7 @@ class RegisterActivity : AppCompatActivity() {
                         i.putExtra("UID", response.body()!!.data!!._id)
                         i.putExtra("SENDYOUEMAIL", response.body()!!.msg)
                         startActivity(i)
-                        finish()
+
 
                     }
 

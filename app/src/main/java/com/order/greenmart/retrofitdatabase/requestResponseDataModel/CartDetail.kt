@@ -1,7 +1,6 @@
 package com.order.greenmart.retrofitdatabase.requestResponseDataModel
 
 import android.widget.TextView
-import com.order.greenmart.RemoveFromCart
 import com.order.greenmart.adapter.CartAdapter
 import com.order.greenmart.retrofitdatabase.requestmodel.CartItemRequest
 import com.order.greenmart.ui.home.HomeViewModel
@@ -26,6 +25,7 @@ data class CartDetail(
         viewModel.updateCartTotal(productDetails.price.toDouble())
         val obj = CartItemRequest(_id!!)
         viewModel.increaseCartItem(obj)
+
     }
 
     fun decreaseItem(
@@ -54,7 +54,7 @@ data class CartDetail(
         viewModel.updateCartTotaldecrease(itemTotal!!)
         val obj = CartItemRequest(_id!!)
         removeItem(position, adapter)
-        RemoveFromCart(obj)
+        viewModel.RemoveFromCart(obj)
     }
 
     fun removeItem(position: Int, adapter: CartAdapter) {

@@ -3,13 +3,13 @@ package com.order.greenmart.ui.home.authentication
 
 import android.content.Intent
 import android.os.Bundle
+import android.os.CountDownTimer
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-
-import com.order.greenmart.retrofitdatabase.GreenMartApi
-import com.order.greenmart.retrofitdatabase.requestmodel.OtpRequest
-import com.order.greenmart.retrofitdatabase.requestResponseDataModel.UserResponse
 import com.order.greenmart.databinding.ActivityOtpverificationBinding
+import com.order.greenmart.retrofitdatabase.GreenMartApi
+import com.order.greenmart.retrofitdatabase.requestResponseDataModel.UserResponse
+import com.order.greenmart.retrofitdatabase.requestmodel.OtpRequest
 import com.otpview.OTPListener
 import retrofit2.Call
 import retrofit2.Response
@@ -49,6 +49,24 @@ class Otpverification : AppCompatActivity() {
                 }
 
             }
+        }
+
+        binding.tvresendotp.setOnClickListener {
+
+            resendOtp(UID!!)
+            binding.tvresendotp.isEnabled = false
+            val countDownTimer =  object : CountDownTimer(30000, 1000) {
+                override fun onTick(millisUntilFinished: Long) {
+                    binding.tvresendotp.text = "seconds remaining: " + millisUntilFinished / 1000
+                }
+
+                override fun onFinish() {
+                    binding.tvresendotp.text = "Resend Otp"
+                    binding.tvresendotp.isEnabled = true
+                }
+            }.start()
+
+
         }
 
 
@@ -146,6 +164,10 @@ class Otpverification : AppCompatActivity() {
                 call: Call<UserResponse>,
                 response: Response<UserResponse>
             ) {
+
+
+
+
             }
 
             override fun onFailure(call: Call<UserResponse>, t: Throwable) {

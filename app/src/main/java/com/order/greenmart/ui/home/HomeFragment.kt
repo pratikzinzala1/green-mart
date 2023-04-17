@@ -28,7 +28,6 @@ class HomeFragment : Fragment() {
 
     private var viewlifecycleOwner: LifecycleOwner? = null
 
-    private lateinit var analytics: FirebaseAnalytics
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -38,6 +37,8 @@ class HomeFragment : Fragment() {
 
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
         viewModel.reFreshProductData()
+
+       // val a = 1/0
         return binding.root
 
     }
@@ -46,7 +47,6 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        analytics = Firebase.analytics
 
 
 
@@ -58,69 +58,8 @@ class HomeFragment : Fragment() {
             ProductAdapter(requireContext(), viewLifecycleOwner, viewModel)
 
 
-        var searchView: SearchView? = null
+        viewModel.reFreshProductData()
 
-        activity?.addMenuProvider(object : MenuProvider {
-            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
-                menuInflater.inflate(R.menu.search_menu, menu)
-
-
-                val search = menu.findItem(R.id.action_search)
-                searchView = search.actionView as SearchView
-
-                searchView!!.setMaxWidth(Integer.MAX_VALUE);
-
-
-                val searchEditText =
-                    searchView!!.findViewById(androidx.appcompat.R.id.search_src_text) as EditText
-                searchEditText.setTextColor(requireActivity().getColor(R.color.Basilbackground))
-                searchEditText.setHintTextColor(requireActivity().getColor(R.color.Basilbackground))
-
-
-                searchView!!.queryHint = "Search.."
-                searchView!!.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-                    override fun onQueryTextSubmit(query: String?): Boolean {
-                        return false
-                    }
-
-
-                    override fun onQueryTextChange(newText: String?): Boolean {
-                        throw RuntimeException("Test Crash")
-
-                        return true
-                    }
-                })
-            }
-
-            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
-                return when (menuItem.itemId) {
-                    R.id.action_refersh -> {
-
-                        true
-                    }
-
-                    else -> false
-                }
-            }
-        }, viewLifecycleOwner, Lifecycle.State.RESUMED)
-
-
-
-        requireActivity()
-            .onBackPressedDispatcher
-            .addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true) {
-                override fun handleOnBackPressed() {
-
-
-                    if (!searchView!!.isIconified()) {
-                        searchView!!.onActionViewCollapsed();
-                    } else {
-                        activity!!.finishAndRemoveTask()
-                    }
-
-                }
-            }
-            )
 
 
 
@@ -192,15 +131,17 @@ class HomeFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
+
         viewModel.privateReFreshProductData()
         viewModel.apiCallCount = 0
     }
 
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-
-        println("ON Destroy Called")
+    override fun onDestroy() {
+        super.onDestroy()
         _binding = null
+        viewModel.finishProgress()
     }
+
+
+
 }

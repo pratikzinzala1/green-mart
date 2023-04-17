@@ -1,13 +1,10 @@
 package com.order.greenmart.retrofitdatabase.requestResponseDataModel
 
 import android.content.Context
-import android.content.res.Resources.Theme
-import android.widget.Button
-import android.widget.ImageView
+
 import android.widget.TextView
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModel
 import com.order.greenmart.*
 import com.order.greenmart.retrofitdatabase.requestmodel.AddToCartRequest
 import com.order.greenmart.retrofitdatabase.requestmodel.CartItemRequest
@@ -42,7 +39,7 @@ data class ProductDetails(
             view.isEnabled = false
             viewModel.apiCallCount++
             val obj = CartItemRequest(cartItemId!!)
-            val live = RemoveFromCart(obj)
+            val live = viewModel.RemoveFromCart(obj)
 
             view.text = "Wait...."
 
@@ -71,7 +68,7 @@ data class ProductDetails(
             view.isEnabled = false
             viewModel.apiCallCount++
             val obj = AddToCartRequest(_id)
-            val live = AddToCart(obj)
+            val live = viewModel.AddToCart(obj)
             view.text = "Wait...."
 
             live.observe(life, Observer {
@@ -106,7 +103,7 @@ data class ProductDetails(
             viewModel.apiCallCount++
 
             val obj = WishListRemoveRequest(watchListItemId!!)
-            val live = RemoveFromWishList(obj)
+            val live = viewModel.RemoveFromWishList(obj)
             view.text = "Wait...."
 
             live.observe(life, Observer {
@@ -121,7 +118,6 @@ data class ProductDetails(
             })
             watchListItemId = null
 
-            // view.setImageResource(R.drawable.svg_heart_outline)
             view.setTextColor(context.getColor(R.color.basilgreen800))
             view.background =
                 context.resources.getDrawable(R.drawable.rightroundborder, context.theme)
@@ -131,7 +127,7 @@ data class ProductDetails(
             viewModel.apiCallCount++
             view.isEnabled = false
             val obj = AddToCartRequest(_id)
-            val live = AddToWishList(obj)
+            val live = viewModel.AddToWishList(obj)
             view.text = "Wait...."
 
             live.observe(life, Observer {
@@ -150,7 +146,6 @@ data class ProductDetails(
             view.setTextColor(context.getColor(R.color.white))
             view.background =
                 context.resources.getDrawable(R.drawable.rightroundfilled, context.theme)
-            // view.setImageResource(R.drawable.ic_like_filled)
 
         }
     }

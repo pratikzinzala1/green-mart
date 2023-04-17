@@ -114,6 +114,7 @@
                             android:id="@+id/togglegrp1"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:orientation="vertical"
                             android:gravity="center">
 
                             <com.google.android.material.button.MaterialButton
@@ -123,6 +124,13 @@
                                 android:layout_height="wrap_content"
                                 android:textSize="15dp"
                                 android:text="Add To Cart" />
+                            <com.google.android.material.button.MaterialButton
+                                android:id="@+id/add_to_wishlist"
+                                style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:textSize="15dp"
+                                android:text="Add To Wishlist" />
 
 
                         </com.google.android.material.button.MaterialButtonToggleGroup>

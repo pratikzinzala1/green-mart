@@ -6,8 +6,10 @@ import com.order.greenmart.GreenMartApplication
 import com.order.greenmart.MainActivity
 import com.order.greenmart.retrofitdatabase.GreenMartApi
 import com.order.greenmart.retrofitdatabase.requestResponseDataModel.*
+import com.order.greenmart.retrofitdatabase.requestmodel.AddToCartRequest
 import com.order.greenmart.retrofitdatabase.requestmodel.CartItemRequest
 import com.order.greenmart.retrofitdatabase.requestmodel.PlaceOrderRequest
+import com.order.greenmart.retrofitdatabase.requestmodel.WishListRemoveRequest
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
@@ -38,10 +40,29 @@ class HomeViewModel : ViewModel() {
     val cartTotalPrice: LiveData<Double>
         get() = _cartTotalPrice
 
+    private var _WishList = MutableLiveData<MutableList<WishListDetail>>()
+    val WishList: LiveData<MutableList<WishListDetail>>
+        get() = _WishList
+
     var apiCallCount: Int = 0
+
+    fun reFrashWishList() {
+        _progressnotifier.value = 1
+        getWishListData()
+    }
+
+    fun privateReFrashWishList() {
+        _progressnotifier.value = 3
+        getWishListData()
+    }
+
+    fun finishProgress() {
+        _progressnotifier.value = 3
+    }
 
 
     val x = GreenMartApplication.sharedPreferences!!.getString("JWTTOKEN", null).toString()
+
     fun updateCartTotal(addedvalue: Double) {
         _cartTotalPrice.value = _cartTotalPrice.value!! + addedvalue
     }
@@ -79,6 +100,7 @@ class HomeViewModel : ViewModel() {
     }
 
     fun reFreshProductData() {
+
         _progressnotifier.value = 1
         getProductData()
 
@@ -137,6 +159,62 @@ class HomeViewModel : ViewModel() {
 
     }
 
+
+    private var _orderlist = MutableLiveData<MutableList<DataXXX>>()
+    val orderlist: LiveData<MutableList<DataXXX>>
+        get() = _orderlist
+
+
+    fun reFreshOrderList() {
+        _progressnotifier.value = 1
+        getOrderData()
+
+    }
+
+
+    private fun getOrderData() {
+
+
+        val productreq = GreenMartApi.retrofitService.getOrderList("Bearer $x")
+        viewModelScope.launch(Dispatchers.IO) {
+
+            productreq.enqueue(object : retrofit2.Callback<OrderListResponse> {
+                var productdata: List<DataXXX> = emptyList()
+                override fun onResponse(
+                    call: Call<OrderListResponse>,
+                    response: Response<OrderListResponse>
+                ) {
+
+                    if (response.code() == 200) {
+                        println("This is order list")
+                        productdata = response.body()!!.data!!
+
+                        _orderlist.value = productdata.toMutableList()
+                        if (response.body()!!.data.isNullOrEmpty()
+                        ) {
+                            _progressnotifier.value = 2
+
+                        } else {
+                            _progressnotifier.value = 3
+                        }
+
+                    } else {
+                        _progressnotifier.value = 3
+
+                        println(response.code())
+                    }
+
+
+                }
+
+                override fun onFailure(call: Call<OrderListResponse>, t: Throwable) {
+                    _progressnotifier.value = 3
+
+                }
+            })
+        }
+
+    }
 
     fun reFreshCart() {
         _progressnotifier.value = 1
@@ -288,18 +366,158 @@ class HomeViewModel : ViewModel() {
     }
 
 
-    private var _WishList = MutableLiveData<MutableList<WishListDetail>>()
-    val WishList: LiveData<MutableList<WishListDetail>>
-        get() = _WishList
+    fun RemoveFromCart(cartItemRequest: CartItemRequest): LiveData<Boolean> {
+        val addToCartRequest = cartItemRequest
+        val jwtToken: String =
+            GreenMartApplication.sharedPreferences!!.getString("JWTTOKEN", null).toString()
 
 
-    fun reFrashWishList() {
-        _progressnotifier.value = 1
-        getWishListData()
+        val requestCall = GreenMartApi.retrofitService.removeFromCart(addToCartRequest, jwtToken)
+
+        val _oncomplete = MutableLiveData<Boolean>()
+        val oncomplete: LiveData<Boolean> = _oncomplete
+
+        requestCall.enqueue(object : retrofit2.Callback<AddToCartRespnse> {
+            override fun onResponse(
+                call: Call<AddToCartRespnse>,
+                response: Response<AddToCartRespnse>
+            ) {
+
+                if (response.code() == 200) {
+                    _oncomplete.value = true
+
+                    println("Removed")
+                    Log.d("ADDED", "Removed")
+                } else {
+                    println("NOT ADDED")
+                    println(response.code())
+                    Log.d("ADDED", "NOT Removed")
+                }
+
+            }
+
+            override fun onFailure(call: Call<AddToCartRespnse>, t: Throwable) {
+                println("Wrong")
+                Log.d("ADDED", "Wrong")
+            }
+        })
+        return oncomplete
     }
-    fun privateReFrashWishList() {
-        _progressnotifier.value = 3
-        getWishListData()
+
+
+    fun AddToWishList(addToCartRequest: AddToCartRequest): LiveData<String> {
+        val addToCartRequest = addToCartRequest
+        val jwtToken: String =
+            GreenMartApplication.sharedPreferences!!.getString("JWTTOKEN", null).toString()
+
+
+        val requestCall = GreenMartApi.retrofitService.AddToWishList(addToCartRequest, jwtToken)
+
+        val _wishitemid = MutableLiveData<String>()
+        val wishitemid: LiveData<String> = _wishitemid
+
+        requestCall.enqueue(object : retrofit2.Callback<AddToWatchListResponse> {
+            override fun onResponse(
+                call: Call<AddToWatchListResponse>,
+                response: Response<AddToWatchListResponse>
+            ) {
+
+                if (response.code() == 200) {
+                    _wishitemid.value = response.body()!!.data._id
+                    println("ItemAdded to WishList")
+                } else {
+                    println("NOT ADDED")
+                    println(response.code())
+                }
+
+            }
+
+            override fun onFailure(call: Call<AddToWatchListResponse>, t: Throwable) {
+                println("Wrong")
+            }
+
+        })
+
+
+        return wishitemid
+    }
+
+
+    fun RemoveFromWishList(wishListRemoveRequest: WishListRemoveRequest): LiveData<Boolean> {
+        val wishListRemoveRequest = wishListRemoveRequest
+        val jwtToken: String =
+            GreenMartApplication.sharedPreferences!!.getString("JWTTOKEN", null).toString()
+        val requestCall =
+            GreenMartApi.retrofitService.removeFromWishList(wishListRemoveRequest, jwtToken)
+
+
+        val _oncomplete = MutableLiveData<Boolean>()
+        val oncomplete: LiveData<Boolean> = _oncomplete
+
+        requestCall.enqueue(object : retrofit2.Callback<WishListResponse> {
+            override fun onResponse(
+                call: Call<WishListResponse>,
+                response: Response<WishListResponse>
+            ) {
+
+                if (response.code() == 200) {
+
+                    _oncomplete.value = true
+                    println("Item Removed from WishList")
+                } else {
+                    println("NOT Removed")
+                    println(response.code())
+                }
+            }
+
+            override fun onFailure(call: Call<WishListResponse>, t: Throwable) {
+                println("Wrong")
+            }
+        })
+
+
+        return oncomplete
+    }
+
+
+    fun AddToCart(addToCartRequest: AddToCartRequest): LiveData<AddToCartDetail> {
+        val addToCartRequest = addToCartRequest
+        val jwtToken: String =
+            GreenMartApplication.sharedPreferences!!.getString("JWTTOKEN", null).toString()
+        val requestCall = GreenMartApi.retrofitService.AddToCart(addToCartRequest, jwtToken)
+
+        var _liveResponse = MutableLiveData<AddToCartDetail>()
+        val liveResponse: LiveData<AddToCartDetail> = _liveResponse
+
+
+
+        requestCall.enqueue(object : retrofit2.Callback<AddToCartRespnse> {
+            override fun onResponse(
+                call: Call<AddToCartRespnse>,
+                response: Response<AddToCartRespnse>
+            ) {
+
+                if (response.code() == 201) {
+
+                    _liveResponse.value = response.body()!!.data!!
+
+                    println("ItemAdded")
+                    Log.d("ADDED", "ItemAdded")
+                } else {
+                    println("NOT ADDED")
+                    println(response.code())
+                    Log.d("ADDED", "NOT ADDED")
+                }
+
+            }
+
+            override fun onFailure(call: Call<AddToCartRespnse>, t: Throwable) {
+                println("Wrong")
+                Log.d("ADDED", "Wrong")
+            }
+        })
+
+        return liveResponse
     }
 
 

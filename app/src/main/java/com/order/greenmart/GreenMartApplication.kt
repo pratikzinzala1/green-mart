@@ -1,9 +1,7 @@
 package com.order.greenmart
 
 import android.app.Application
-import android.content.Context
-import android.content.Intent
-import android.content.SharedPreferences
+import android.content.*
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.os.Binder
@@ -14,6 +12,10 @@ import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.recyclerview.widget.RecyclerView
 import com.order.greenmart.ui.home.authentication.LoginActivity
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 
 class GreenMartApplication:Application() {
 
@@ -21,43 +23,52 @@ class GreenMartApplication:Application() {
 
 
     companion object{
-      //  var productRepository:ProductRepository? = null
         var sharedPreferences:SharedPreferences? = null
         var editor:SharedPreferences.Editor? = null
 
     }
 
+    lateinit var networkChangeReceiver: BroadcastReceiver
+
 
     override fun onCreate() {
         super.onCreate()
 
-//
-//        val database: AppDatabase by lazy { AppDatabase.getDatabase(this) }
-//        productRepository = ProductRepository(database.scheduleDao())
-//        productRepository = productRepository
-//
+        networkChangeReceiver = object : BroadcastReceiver() {
+            override fun onReceive(context: Context?, intent: Intent?) {
+                if (!isNetworkAvailable(this@GreenMartApplication)) {
+                    val i = Intent(this@GreenMartApplication, ShowMessage::class.java)
+                    i.flags = Intent.FLAG_ACTIVITY_NEW_TASK
+                    startActivity(i)
+                    return
+                }
+
+            }
+
+        }
+
+        registerReceiver(
+            networkChangeReceiver,
+            IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION)
+        )
 
 
 
         sharedPreferences = getSharedPreferences("GREENMART", MODE_PRIVATE)
         editor = sharedPreferences!!.edit()
 
-
-
-
     }
 
 
-
-
-
-    fun printInternet(){
-        if (checkForInternet(this)){
-
-            Toast.makeText(this,"No Internet",Toast.LENGTH_SHORT).show()
-
+    fun isNetworkAvailable(context: Context) =
+        (context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager).run {
+            getNetworkCapabilities(activeNetwork)?.run {
+                hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)
+                        || hasTransport(NetworkCapabilities.TRANSPORT_WIFI)
+                        || hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET)
+            } ?: false
         }
-    }
+
 
 
 
@@ -66,42 +77,6 @@ class GreenMartApplication:Application() {
 
 
 
-fun checkForInternet(context: Context): Boolean {
 
-    // register activity with the connectivity manager service
-    val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
 
-    // if the android version is equal to M
-    // or greater we need to use the
-    // NetworkCapabilities to check what type of
-    // network has the internet connection
-    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-
-        // Returns a Network object corresponding to
-        // the currently active default data network.
-        val network = connectivityManager.activeNetwork ?: return false
-
-        // Representation of the capabilities of an active network.
-        val activeNetwork = connectivityManager.getNetworkCapabilities(network) ?: return false
-
-        return when {
-            // Indicates this network uses a Wi-Fi transport,
-            // or WiFi has network connectivity
-            activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> true
-
-            // Indicates this network uses a Cellular transport. or
-            // Cellular has network connectivity
-            activeNetwork.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> true
-
-            // else return false
-            else -> false
-        }
-    } else {
-        // if the android version is below M
-        @Suppress("DEPRECATION") val networkInfo =
-            connectivityManager.activeNetworkInfo ?: return false
-        @Suppress("DEPRECATION")
-        return networkInfo.isConnected
-    }
-}
 

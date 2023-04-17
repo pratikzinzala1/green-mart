@@ -4,12 +4,14 @@ import android.os.Bundle
 import android.view.*
 import androidx.fragment.app.Fragment
 import androidx.core.view.MenuProvider
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.Observer
 import com.order.greenmart.R
 import com.order.greenmart.adapter.OrderListAdapter
 import com.order.greenmart.databinding.FragmentOrderlistBinding
+import com.order.greenmart.ui.home.HomeViewModel
 
 
 class OrderlistFragment : Fragment() {
@@ -18,7 +20,7 @@ class OrderlistFragment : Fragment() {
     private var _binding: FragmentOrderlistBinding? = null
     private val binding get() = _binding
 
-    private val viewModel: OrderlistViewModel by viewModels()
+    private val viewModel: HomeViewModel by activityViewModels()
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
@@ -37,7 +39,6 @@ class OrderlistFragment : Fragment() {
         binding!!.context = viewLifecycleOwner
         binding!!.recyclerview.adapter = OrderListAdapter()
 
-        viewModel.reFreshOrderList()
 
 
 
@@ -49,7 +50,7 @@ class OrderlistFragment : Fragment() {
                 }
                 2 -> {
                     binding!!.progressHorizontal.visibility = View.GONE
-                    binding!!.tvcart.text = "Your WishList Is \n Empty!"
+                    binding!!.tvcart.text = "Your Orderlist Is \n Empty!"
                 }
                 3 -> {
                     binding!!.progressHorizontal.visibility = View.GONE
@@ -60,26 +61,21 @@ class OrderlistFragment : Fragment() {
         })
 
 
-        activity?.addMenuProvider(object : MenuProvider {
-            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
-
-                menuInflater.inflate(R.menu.main, menu)
-            }
-
-            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
-                return when (menuItem.itemId) {
-                    R.id.action_refersh -> {
-                        viewModel.reFreshOrderList()
-                        true
-                    }
-
-                    else -> false
-                }
-            }
-        }, viewLifecycleOwner, Lifecycle.State.RESUMED)
-
 
     }
+
+    override fun onResume() {
+        super.onResume()
+        viewModel.reFreshOrderList()
+    }
+    override fun onDestroy() {
+        super.onDestroy()
+        _binding = null
+        viewModel.finishProgress()
+    }
+
+
+
 
 
 }

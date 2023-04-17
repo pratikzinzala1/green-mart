@@ -12,7 +12,7 @@
 
         <variable
             name="ViewModel"
-            type="com.order.greenmart.ui.home.orderlist.OrderlistViewModel" />
+            type="com.order.greenmart.ui.home.HomeViewModel" />
 
     </data>
 

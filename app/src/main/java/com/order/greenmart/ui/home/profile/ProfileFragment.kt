@@ -45,6 +45,22 @@ class ProfileFragment : Fragment() {
 
         }
 
+        if (GreenMartApplication.sharedPreferences!!.getBoolean("CHECKED",false)){
+            binding.notificationswitch.isChecked = true
+        }
+
+        binding.notificationswitch.setOnCheckedChangeListener { compoundButton, b ->
+            if (b){
+                GreenMartApplication.editor!!.putBoolean("CHECKED",true).commit()
+
+            }
+            else{
+                GreenMartApplication.editor!!.putBoolean("CHECKED",false).commit()
+
+            }
+
+        }
+
 
 
         return _binding!!.root

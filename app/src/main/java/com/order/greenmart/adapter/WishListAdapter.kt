@@ -23,7 +23,8 @@ class WishListAdapter(val lifecycleOwner: LifecycleOwner, var viewModel: HomeVie
             binding.removeFromWishlist.setOnClickListener {
                 item.addToWishList(
                     this@WishListAdapter,
-                    adapterPosition
+                    adapterPosition,
+                    viewModel
                 )
 
             }

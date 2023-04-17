@@ -1,11 +1,8 @@
 package com.order.greenmart.retrofitdatabase.requestResponseDataModel
 
-import android.widget.Button
-import androidx.lifecycle.LifecycleOwner
-import androidx.lifecycle.Observer
-import com.order.greenmart.RemoveFromWishList
 import com.order.greenmart.adapter.WishListAdapter
 import com.order.greenmart.retrofitdatabase.requestmodel.WishListRemoveRequest
+import com.order.greenmart.ui.home.HomeViewModel
 
 data class WishListDetail(
     val __v: Int,
@@ -18,13 +15,13 @@ data class WishListDetail(
     var isInWatchList: Boolean? = false
 
 
-    fun addToWishList(adapter: WishListAdapter, position: Int) {
+    fun addToWishList(adapter: WishListAdapter, position: Int,viewModel:HomeViewModel) {
 
         if (isInWatchList!! == false) {
             isInWatchList = true
             removeItem(position, adapter)
             val obj = WishListRemoveRequest(_id)
-            RemoveFromWishList(obj)
+            viewModel.RemoveFromWishList(obj)
 
 
         }

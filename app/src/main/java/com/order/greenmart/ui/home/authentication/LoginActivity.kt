@@ -92,7 +92,6 @@ class LoginActivity : AppCompatActivity() {
                         putExtra("FORGOTPASSWORD", true)
                     }
                     startActivity(i)
-                    finish()
 
                 } else if (response.code() == 400) {
                     binding.progressHorizontal.visibility = View.INVISIBLE
@@ -136,6 +135,7 @@ class LoginActivity : AppCompatActivity() {
                         putString("UID", response.body()!!.data!!._id)
                         putString("JWTTOKEN", response.body()!!.data!!.jwtToken)
                         putString("NAME", response.body()!!.data!!.name)
+                        putBoolean("CHECKED", true)
                     }!!.commit()
 
 

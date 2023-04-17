@@ -1,9 +1,11 @@
 package com.order.greenmart
 
+import android.Manifest
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.content.pm.PackageManager
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
 import android.net.NetworkInfo
@@ -19,6 +21,9 @@ import com.google.android.material.navigation.NavigationView
 import androidx.navigation.findNavController
 import androidx.drawerlayout.widget.DrawerLayout
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
+import androidx.core.app.NotificationManagerCompat
+import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.core.view.GravityCompat
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
@@ -40,7 +45,6 @@ class MainActivity : AppCompatActivity() {
     private lateinit var binding: ActivityMainBinding
     lateinit var navController: NavController
 
-    lateinit var networkChangeReceiver: BroadcastReceiver
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -48,6 +52,10 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
         setSupportActionBar(binding.toolbar)
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.TIRAMISU) {
+            ActivityCompat.requestPermissions(this, arrayOf( Manifest.permission.POST_NOTIFICATIONS), 123 )
+        }
 
 
         val drawerLayout: DrawerLayout = binding.drawerLayout
@@ -69,10 +77,6 @@ class MainActivity : AppCompatActivity() {
         setupActionBarWithNavController(navController, appBarConfiguration)
         navView.setupWithNavController(navController)
 
-        if (intent.getBooleanExtra("CARTLAUNCH", false)) {
-            navController.navigate(R.id.nav_cart)
-        }
-
 
         navView.menu.findItem(R.id.nav_home).setOnMenuItemClickListener {
             navController.navigate(R.id.nav_home)
@@ -85,48 +89,15 @@ class MainActivity : AppCompatActivity() {
         }
 
 
-        networkChangeReceiver = object : BroadcastReceiver() {
-            override fun onReceive(context: Context?, intent: Intent?) {
-                if (!isNetworkAvailable(this@MainActivity)) {
-                    startActivity(Intent(this@MainActivity,ShowMessage::class.java))
-                    return
-                }
 
-            }
+    }
 
-        }
-
-        registerReceiver(
-            networkChangeReceiver,
-            IntentFilter(ConnectivityManager.CONNECTIVITY_ACTION)
-        )
-
+    override fun onResume() {
+        super.onResume()
 
     }
 
 
-    fun isNetworkAvailable(context: Context) =
-        (context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager).run {
-            getNetworkCapabilities(activeNetwork)?.run {
-                hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR)
-                        || hasTransport(NetworkCapabilities.TRANSPORT_WIFI)
-                        || hasTransport(NetworkCapabilities.TRANSPORT_ETHERNET)
-            } ?: false
-        }
-
-//    private fun isNetworkAvailable(): Boolean {
-//        val connectivityManager =
-//            this.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
-//        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-//            val network = connectivityManager.activeNetwork ?: return false
-//            val networkCapabilities =
-//                connectivityManager.getNetworkCapabilities(network) ?: return false
-//            return networkCapabilities.hasCapability(NetworkCapabilities.NET_CAPABILITY_INTERNET)
-//        } else {
-//            val networkInfo = connectivityManager.activeNetworkInfo ?: return false
-//            return networkInfo.isConnected
-//        }
-//    }
 
 
     fun logoutuser() {
@@ -134,7 +105,6 @@ class MainActivity : AppCompatActivity() {
         startActivity(Intent(this, LoginActivity::class.java))
         finish()
     }
-
 
 
     fun showSnackBar(msg: String) {
