@@ -10,3 +10,6 @@ Green-Mart is an online ordering system app. In this app a have added functional
 - [Lottiefiles](https://lottiefiles.com/) - Lightweight, scalable animations for your website and apps. LottieFiles provides all the tools that you need to create, edit, test and display Lottie animations.
 - [Material Components for Android](https://github.com/material-components/material-components-android)
 - Modular and customizable Material Design UI components for Android.
+
+
+## 😀 If you liked the app, Please give it a ⭐ and fork the repository. 🤚🏻
