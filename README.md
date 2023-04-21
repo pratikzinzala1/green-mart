@@ -2,7 +2,7 @@
 Green-Mart is an online ordering system app. In this app a have added functionality to place order online.
 
 
-## Built With 🛠
+## 🛠Built With
 
 - [Kotlin](https://kotlinlang.org/) - First class and official programming language for Android
   development.
@@ -12,7 +12,7 @@ Green-Mart is an online ordering system app. In this app a have added functional
 - Modular and customizable Material Design UI components for Android.
 
 
-## Features
+## 🔰 Features
 The app includes the following features:
 
 User authentication: Customers can create an account, log in, and securely store their personal information.
@@ -24,7 +24,7 @@ Place an order: Customers can place an order.
 History and favorites: Customers can view their order history and save their favorite items for quick reordering.
 
 
-## Setup
+## 💻 Setup
 #To set up the app, follow these steps:
 
 Clone the repository to your local machine.
@@ -39,3 +39,6 @@ Configure the app to connect to the backend server.
 
 Customize the app's design and functionality to meet your specific needs.
 ## 😀 If you liked the app, Please give it a ⭐ and fork the repository. 🤚🏻
+
+## 📧 Contact
+If you have any questions or suggestions, please feel free to contact us at [email address]. We would love to hear from you and help you in any way we can.
